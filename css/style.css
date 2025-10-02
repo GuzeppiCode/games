@@ -1,0 +1,25 @@
+body {background-color: white;}
+.pp {
+ font-size: 150%;
+ color: green;
+}
+
+
+.add-button {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  //color:#2196F3; 
+ color:#001F1F; 
+background-color:#FFFFFF;
+  font-size:20px;
+}
+
+.add-button2 {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  color:#001F1F; 
+background-color:#FFFFFF;
+  font-size:16px;
+}

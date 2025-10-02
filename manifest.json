@@ -1,0 +1,29 @@
+{
+"theme_color": "#2196F3",
+  "background_color": "#21eff3",
+  "description": "A set of games for Luke ",
+  "display": "fullscreen",
+  "icons": [
+
+{
+      "src": "icon/big-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+{
+      "src": "icon/small-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+
+    {
+      "src": "icon/fox-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+           "purpose": "any maskable"
+    }
+  ],
+  "name": "Luke",
+  "short_name": "Luke,
+ "start_url": "index.html?standalone=true"           
+}
