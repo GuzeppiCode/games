@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        background-color: #f0f8ff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+        max-height: 80vh;
+        object-fit: contain;
+        touch-action: manipulation;
+    }
+
+    #face {
+        font-size: 6vw;
+        color: #0033cc;
+        text-align: center;
+        margin: 10px;
+        font-family: Arial, sans-serif;
+    }
+
+    @media (min-width: 768px) {
+        #face {
+            font-size: 48px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div id="container">
+    <p id="face">Listen carefully...</p>
+
+    <img src="man.png" usemap="#image-map" id="faceImage">
+
+    <map name="image-map">
+        <area shape="circle" coords="186,367,35" onclick="checkAnswer('CHIN')" alt="Chin">
+        <area shape="rect" coords="139,325,227,282" onclick="checkAnswer('MOUTH')" alt="Mouth">
+        <area shape="rect" coords="213,275,151,214" onclick="checkAnswer('NOSE')" alt="Nose">
+        <area shape="rect" coords="90,188,276,213" onclick="checkAnswer('EYES')" alt="Eyes">
+        <area shape="rect" coords="92,162,272,184" onclick="checkAnswer('EYEBROWS')" alt="Eyebrows">
+        <area shape="rect" coords="88,106,272,171" onclick="checkAnswer('FOREHEAD')" alt="Forehead">
+        <area shape="rect" coords="87,22,287,93" onclick="checkAnswer('HAIR')" alt="Hair">
+        <area shape="rect" coords="77,382,288,433" onclick="checkAnswer('NECK')" alt="Neck">
+        <area shape="rect" coords="273,184,319,288" onclick="checkAnswer('EARS')" alt="Ears">
+        <area shape="rect" coords="36,184,82,276" onclick="checkAnswer('EARS')" alt="Ears">
+        <area shape="rect" coords="215,230,268,286" onclick="checkAnswer('CHEEK')" alt="Cheek">
+        <area shape="rect" coords="94,220,142,280" onclick="checkAnswer('CHEEK')" alt="Cheek">
+    </map>
+
+    <audio id="reward-player" src="reward.mp3" preload="auto"></audio>
+    <audio id="wrong-player" src="tryagain.mp3" preload="auto"></audio>
+</div>
+
+<script>
+// Body parts list
+const bodyParts = ["CHIN", "MOUTH", "NOSE", "EYES", "EYEBROWS", "FOREHEAD", "HAIR", "NECK", "EARS", "CHEEK"];
+let currentPart = "";
+
+// Randomly call a part
+function callNextPart() {
+    const randomIndex = Math.floor(Math.random() * bodyParts.length);
+    currentPart = bodyParts[randomIndex];
+    document.getElementById("face").innerHTML = "Find: " + currentPart;
+    speak(currentPart);
+}
+
+// Check child’s click
+function checkAnswer(clickedPart) {
+    if (clickedPart === currentPart) {
+        document.getElementById("face").innerHTML = " Correct! " + currentPart + "!";
+        playReward();
+        setTimeout(callNextPart, 2000);
+    } else {
+        document.getElementById("face").innerHTML = "❌ Try again!";
+        playWrong();
+        speak("Try again");
+    }
+}
+
+// Play reward
+function playReward() {
+    const reward = document.getElementById('reward-player');
+    reward.currentTime = 0;
+    reward.play();
+}
+
+// Play wrong sound
+function playWrong() {
+    const wrong = document.getElementById('wrong-player');
+    wrong.currentTime = 0;
+    wrong.play();
+}
+
+// Voice output
+function speak(text) {
+    if ('speechSynthesis' in window) {
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.rate = 0.9;
+        msg.pitch = 1.0;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(msg);
+    }
+}
+
+// Start game when page loads
+window.onload = callNextPart;
+
+// Make image map responsive
+window.addEventListener('resize', resizeMap);
+function resizeMap() {
+    const img = document.getElementById('faceImage');
+    const width = img.naturalWidth;
+    const height = img.naturalHeight;
+    const currentWidth = img.clientWidth;
+    const currentHeight = img.clientHeight;
+    const wRatio = currentWidth / width;
+    const hRatio = currentHeight / height;
+
+    document.querySelectorAll('area').forEach(area => {
+        const coords = area.dataset.originalCoords ? area.dataset.originalCoords.split(',') : area.coords.split(',');
+        if (!area.dataset.originalCoords) area.dataset.originalCoords = area.coords;
+        const newCoords = coords.map((c, i) => i % 2 === 0 ? c * wRatio : c * hRatio);
+        area.coords = newCoords.join(',');
+    });
+}
+
+// Adjust map on first load
+window.addEventListener('load', resizeMap);
+</script>
+
+</body>
+</html>

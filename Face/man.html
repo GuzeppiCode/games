@@ -1,0 +1,89 @@
+<!-----------------------------------
+<map name="image-map">
+    <area target="_blank" alt="mouth" title="mouth" href="" coords="139,325,227,282" shape="rect">
+    <area target="" alt="nose" title="nose" href="" coords="213,275,151,214" shape="rect">
+    <area target="" alt="eyes" title="eyes" href="" coords="90,188,276,213" shape="rect">
+    <area target="" alt="eyebrows" title="eyebrows" href="" coords="92,162,272,184" shape="rect">
+</map>
+
+
+   <area target="" alt="forehead" title="forehead" href="" coords="88,106,272,171" shape="rect">
+    <area target="" alt="hair" title="hair" href="" coords="87,22,287,93" shape="rect">
+    <area target="" alt="neck" title="neck" href="" coords="77,382,288,433" shape="rect">
+    <area target="" alt="ears" title="ears" href="" coords="273,184,319,288" shape="rect">
+    <area target="" alt="ears" title="ears" href="" coords="36,184,82,276" shape="rect">
+
+
+    <area target="" alt="cheek" title="cheek" href="" coords="215,230,268,286" shape="rect">
+    <area target="" alt="cheek" title="cheek" href="" coords="94,220,142,280" shape="rect">
+</map>
+
+
+https://ttsmp3.com/ai   
+
+https://www.image-map.net/
+
+----------------------->
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <style>
+        img {
+           max-width: 100%;
+            height: auto;
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+
+<img src="man.png"  usemap="#image-map">
+
+<map name="image-map">
+
+
+ <area shape="circle" coords="186,367,35" onclick="playAudio('chin.mp3' , 'CHIN')" alt="Another Area">
+<area shape="rect" coords="139,325,227,282" onclick="playAudio('mouth.mp3' , 'MOUTH')" alt="Another Area">
+<area shape="rect" coords="213,275,151,214" onclick="playAudio('nose.mp3','NOSE')" alt="Another Area">
+
+<area shape="rect" coords="90,188,276,213" onclick="playAudio('eyes.mp3','EYES')" alt="Another Area">
+<area shape="rect" coords="92,162,272,184" onclick="playAudio('eyebrows.mp3' , 'EYEBROWS')" alt="Another Area">
+
+<area shape="rect" coords="88,106,272,171" onclick="playAudio('forehead.mp3', 'FOREHEAD')" alt="Another Area">
+<area shape="rect" coords="87,22,287,93" onclick="playAudio('hair.mp3', 'HAIR')" alt="Another Area">
+
+<area shape="rect" coords="77,382,288,433" onclick="playAudio('neck.mp3', 'NECK')" alt="Another Area">
+<area shape="rect" coords="273,184,319,288" onclick="playAudio('ears.mp3', 'EARS')" alt="Another Area">
+<area shape="rect" coords="36,184,82,276" onclick="playAudio('ears.mp3', 'EARS')" alt="Another Area">
+
+<area shape="rect" coords="215,230,268,286" onclick="playAudio('cheek.mp3', 'CHEEK')" alt="Another Area">
+<area shape="rect" coords="94,220,142,280" onclick="playAudio('cheek.mp3', 'CHEEK')" alt="Another Area">
+
+
+</map>
+<audio id="audio-player" src="" preload="auto"></audio>
+
+<p id= "face"  style = "text-align:left; font-size: 72px; color:blue;">FACE</p>
+<script>
+function playAudio(audioFile, wicc) {
+document.getElementById("face").innerHTML = wicc;
+    var audio = document.getElementById('audio-player');
+    audio.src = audioFile;
+    audio.play();
+}
+</script>
+
+
+
+</body>
+</html>
