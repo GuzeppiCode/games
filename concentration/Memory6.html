@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concentration Game (3x2)</title>
+<style>
+  body {
+    background-color: wheat;
+    font-family: Arial, sans-serif;
+    color: #b22222;
+    text-align: center;
+    margin: 0;
+    padding: 1em;
+  }
+  h1 {
+    font-size: 1.8em;
+  }
+  .game-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-items: center;
+    margin: 1em auto;
+    max-width: 300px;
+  }
+  .game-container img {
+    width: 100%;
+    height: auto;
+    max-width: 90px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .game-container img:active {
+    transform: scale(0.95);
+  }
+  .controls {
+    margin-top: 1em;
+  }
+  .timer {
+    background: #fff8dc;
+    border: 1px solid #b22222;
+    border-radius: 8px;
+    padding: 0.5em 1em;
+    font-size: 1.2em;
+    display: inline-block;
+    width: 100px;
+  }
+  button {
+    background-color: #b22222;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    margin-top: 1em;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #8b1a1a;
+  }
+  @media (max-width: 480px) {
+    .game-container {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 220px;
+    }
+    .game-container img {
+      max-width: 100px;
+    }
+  }
+</style>
+</head>
+<body onload="init()">
+
+<h1>Ikkonċentra Ħafna</h1>
+<h3>Ikklikkja fuq l-istampi u ipprova qabbelhom kollha!</h3>
+<h4>Kemm se ddum biex tqabbilhom kollha?</h4>
+
+<div class="controls">
+  <span class="timer" id="timer">0:00</span><br>
+  <button onclick="init()">Reset Game</button>
+</div>
+
+<div class="game-container" id="game-board"></div>
+
+<script>
+let pics = [];
+for (let i = 0; i <= 3; i++) { // image0 = back, 1–3 = pairs
+  pics[i] = new Image();
+  pics[i].src = 'image' + i + '.gif';
+}
+
+let map = [];
+let user = [];
+let clickarray = [0, 0];
+let ticker, sec, min, ctr, id, oktoclick, finished;
+
+function init() {
+  clearTimeout(id);
+  // 3 pairs = 6 total
+  map = [1,1,2,2,3,3];
+  user = new Array(6).fill(0);
+  ticker = 0;
+  min = 0;
+  sec = 0;
+  ctr = 0;
+  oktoclick = true;
+  finished = 0;
+  scramble();
+  runclk();
+  drawBoard();
+}
+
+function drawBoard() {
+  const board = document.getElementById('game-board');
+  board.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const img = document.createElement('img');
+    img.src = 'image0.gif';
+    img.dataset.index = i;
+    img.addEventListener('click', () => showimage(i));
+    board.appendChild(img);
+  }
+}
+
+function runclk() {
+  min = Math.floor(ticker / 60);
+  sec = (ticker - (min * 60)).toString().padStart(2, '0');
+  document.getElementById('timer').textContent = `${min}:${sec}`;
+  ticker++;
+  id = setTimeout(runclk, 1000);
+}
+
+function scramble() {
+  for (let z = 0; z < 5; z++) {
+    for (let x = 0; x < map.length; x++) {
+      let r = Math.floor(Math.random() * map.length);
+      [map[x], map[r]] = [map[r], map[x]];
+    }
+  }
+}
+
+function showimage(but) {
+  if (!oktoclick || user[but]) return;
+  const imgs = document.querySelectorAll('#game-board img');
+  imgs[but].src = 'image' + map[but] + '.gif';
+  if (ctr === 0) {
+    ctr++;
+    clickarray[0] = but;
+  } else {
+    clickarray[1] = but;
+    ctr = 0;
+    oktoclick = false;
+    setTimeout(returntoold, 600);
+  }
+}
+
+function returntoold() {
+  const imgs = document.querySelectorAll('#game-board img');
+  const [a, b] = clickarray;
+  if (map[a] !== map[b]) {
+    if (!user[a]) imgs[a].src = 'image0.gif';
+    if (!user[b]) imgs[b].src = 'image0.gif';
+  } else if (!user[a] && !user[b]) {
+    user[a] = 1; user[b] = 1;
+    finished++;
+  }
+  oktoclick = true;
+  if (finished >= 3) {
+    alert(`Qabbilthom kollha f' ${document.getElementById('timer').textContent}. Prosit!`);
+    init();
+  }
+}
+</script>
+
+</body>
+</html>
