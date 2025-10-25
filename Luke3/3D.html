@@ -68,15 +68,15 @@
             margin-bottom: 10px;
         }
 
-        button, input[type="range"] {
+        button, select {
             margin: 5px;
             padding: 6px 12px;
-            font-size: 48px;   /*26*/
+            font-size: 48px;
         }
 
         label {
             margin-left: 10px;
-           font-size: 48px;   /*Nehhi*/
+            font-size: 48px;
         }
     </style>
 </head>
@@ -97,14 +97,18 @@
         <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.1" />
     </label><br>
     <label>Image Opacity:
-        <input type="range" id="opacity-slider" min="0" max="1" step="0.01" value="0.5" />
+        <select id="opacity-select">
+            <option value="0" selected>Invisible</option>
+            <option value="0.3">Seen faintly</option>
+            <option value="0.7">Not so faintly</option>
+        </select>
     </label>
 </div>
 
 <div id="game-board"></div>
 
 <script>
-    const images = [
+   const images = [
         { img: '1.jpg', audio: '1.mp3', text: 'bear' },
         { img: '2.jpg', audio: '2.mp3', text: 'tiger' },
         { img: '3.jpg', audio: '3.mp3', text: 'snake' },
@@ -115,19 +119,18 @@
         { img: '8.jpg', audio: '8.mp3', text: 'cat' },
         { img: '9.jpg', audio: '9.mp3', text: 'parrot' }
     ];
-
     const gameBoard = document.getElementById('game-board');
     const startBtn = document.getElementById('start-btn');
     const repeatBtn = document.getElementById('repeat-btn');
     const volumeSlider = document.getElementById('volume-slider');
-    const opacitySlider = document.getElementById('opacity-slider');
+    const opacitySelect = document.getElementById('opacity-select');
     const promptSound = document.getElementById('prompt-sound');
     const clapSound = document.getElementById('clap-sound');
     const backgroundMusic = document.getElementById('background-music');
 
     let currentTarget = null;
     let currentCards = [];
-    let gameStage = 0; // Track clicks of Start Game
+    let gameStage = 0;
 
     function createBoard(cards) {
         gameBoard.innerHTML = '';
@@ -141,7 +144,7 @@
             const bg = document.createElement('div');
             bg.className = 'background-layer';
             bg.style.backgroundImage = `url(${item.img})`;
-            bg.style.opacity = opacitySlider.value;
+            bg.style.opacity = opacitySelect.value;
 
             const text = document.createElement('div');
             text.className = 'card-text';
@@ -176,14 +179,13 @@
         } else if (gameStage === 3) {
             createBoard(images.slice(6, 9));
         } else {
-            createBoard(images); // All 9 images
-            gameStage = 0; // Reset cycle
+            createBoard(images);
+            gameStage = 0;
         }
 
         promptNextTarget();
         repeatBtn.disabled = false;
 
-        // Play music after user interaction
         backgroundMusic.volume = parseFloat(volumeSlider.value);
         backgroundMusic.play().catch(err => {
             console.warn("Background music failed to play:", err);
@@ -203,9 +205,9 @@
         backgroundMusic.volume = parseFloat(volumeSlider.value);
     };
 
-    opacitySlider.oninput = () => {
+    opacitySelect.onchange = () => {
         document.querySelectorAll('.background-layer').forEach(layer => {
-            layer.style.opacity = opacitySlider.value;
+            layer.style.opacity = opacitySelect.value;
         });
     };
 </script>
